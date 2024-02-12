@@ -18,11 +18,38 @@ const canvas = document.querySelector("canvas.webgl");
 // Scene
 const scene = new THREE.Scene();
 
-// Créer un helper pour les axes
-const axesHelper = new THREE.AxesHelper(5); // 5 est la longueur des axes
+const axesHelper = new THREE.AxesHelper(5);
 
-// Ajouter l'helper à la scène
 scene.add(axesHelper);
+
+/**
+ * Textures
+ */
+
+const textureLoader = new THREE.TextureLoader();
+
+// //Floor
+// const floorColorTexture = textureLoader.load(
+//   "/textures/floor2/wood_cabinet_worn_long_diff_4k.jpg"
+// );
+
+// floorColorTexture.colorSpace = THREE.SRGBColorSpace;
+// const floorNormalTexture = textureLoader.load(
+//   "/textures/floor2/wood_cabinet_worn_long_nor_gl_4k.exr"
+// );
+// const floorRoughnessTexture = textureLoader.load(
+//   "/textures/floor2/wood_cabinet_worn_long_rough_gl_4k.exr"
+// );
+const floorColorTexture = textureLoader.load(
+  "/textures/floor/laminate_floor_03_diff_4k.jpg"
+);
+floorColorTexture.colorSpace = THREE.SRGBColorSpace;
+const floorNormalTexture = textureLoader.load(
+  "/textures/floor/laminate_floor_03_nor_gl_4k.exr"
+);
+const floorRoughnessTexture = textureLoader.load(
+  "/textures/floor/laminate_floor_03_rough_gl_4k.exr"
+);
 
 /**
  * Models
@@ -40,7 +67,7 @@ let model;
 gltfLoader.load("/models/phone.glb", (gltf) => {
   model = gltf.scene;
   model.scale.set(0.2, 0.2, 0.2);
-  model.position.y = 3;
+  model.position.y = 1.5;
   model.position.z = 3;
   model.rotation.y = Math.PI * 1.35;
 
@@ -67,9 +94,14 @@ debugObject.wallColor = "#010A0C";
 const floor = new THREE.Mesh(
   new THREE.PlaneGeometry(10, 10),
   new THREE.MeshStandardMaterial({
-    color: debugObject.wallColor,
+    // color: debugObject.wallColor,
     metalness: 0,
     roughness: 0.5,
+    map: floorColorTexture,
+    normalMap: floorNormalTexture,
+    roughnessMap: floorRoughnessTexture,
+    transparent: true,
+    opacity: 0.8,
   })
 );
 floor.receiveShadow = true;
@@ -278,12 +310,12 @@ window.addEventListener("resize", () => {
  */
 // Base camera
 const camera = new THREE.PerspectiveCamera(
-  40,
+  45,
   sizes.width / sizes.height,
   0.1,
   100
 );
-camera.position.set(0, 6.5, 7);
+camera.position.set(0, 3.3, 7.5);
 gui.add(camera.position, "x", -20, 20, 0.1).name("cameraPositionX");
 gui.add(camera.position, "y", -20, 20, 0.1).name("cameraPositionY");
 gui.add(camera.position, "z", -20, 20, 0.1).name("cameraPositionZ");
