@@ -4,6 +4,9 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import GUI from "lil-gui";
 
+const nextButton = document.getElementById("next");
+console.log(nextButton);
+
 /**
  * Base
  */
@@ -37,37 +40,62 @@ dracoLoader.setDecoderPath("/draco/");
 const gltfLoader = new GLTFLoader();
 gltfLoader.setDRACOLoader(dracoLoader);
 
+const finalScene = new THREE.Group();
+
+//World1
+const world1 = new THREE.Group();
+
+//World2
+const world2 = new THREE.Group();
+
 let mixer = null;
 
-let model;
+let phone;
 
 gltfLoader.load("/models/phone.glb", (gltf) => {
-  model = gltf.scene;
-  model.scale.set(0.2, 0.2, 0.2);
-  model.position.y = 1.5;
-  model.position.z = 3;
-  model.rotation.y = Math.PI * 1.35;
+  phone = gltf.scene;
+  phone.scale.set(0.2, 0.2, 0.2);
+  phone.position.y = 1.5;
+  phone.position.z = 3;
+  phone.rotation.y = Math.PI * 1.35;
 
-  model.traverse((child) => {
+  phone.traverse((child) => {
     if (child.isMesh) {
       child.castShadow = true;
       child.receiveShadow = true;
     }
   });
-  scene.add(model);
-  console.log(model.position);
+  world1.add(phone);
   tick();
-
-  //   updateAllMaterials();
 });
+
+let paint;
+gltfLoader.load("/models/paint.glb", (gltf) => {
+  paint = gltf.scene;
+  paint.scale.set(0.4, 0.4, 0.4);
+  paint.position.y = -2.5;
+  paint.position.z = 3;
+  paint.rotation.y = Math.PI * 1.35;
+  paint.rotation.x = Math.PI * 0.65;
+
+  paint.traverse((child) => {
+    if (child.isMesh) {
+      child.castShadow = true;
+      child.receiveShadow = true;
+    }
+  });
+  world2.add(paint);
+  tick();
+});
+
+/**
+ * Background 1
+ */
 
 /**
  * Floor
  */
 
-/**
- * Background 1
- */
 const backgroundGroup = new THREE.Group();
 
 debugObject.wallColor = "#010A0C";
@@ -145,7 +173,7 @@ backgroundGroup.rotation.y = Math.PI * 0.5;
 backgroundGroup.position.y = -1;
 backgroundGroup.position.z = 3;
 
-scene.add(backgroundGroup);
+world1.add(backgroundGroup);
 
 /**
  * Background 2
@@ -228,7 +256,7 @@ secondBackgroundGroup.rotation.x = Math.PI;
 secondBackgroundGroup.position.y = -1;
 secondBackgroundGroup.position.z = 3;
 
-scene.add(secondBackgroundGroup);
+world2.add(secondBackgroundGroup);
 
 const background = gui.addFolder("background");
 background
@@ -250,7 +278,7 @@ background.addColor(debugObject, "wallColor").onChange((value) => {
 });
 
 /**
- * Lights
+ * Lights 1
  */
 
 const lights = gui.addFolder("Lights");
@@ -359,6 +387,17 @@ lights.add(pointLight2.position, "z", 0, 10, 0.1).name("pointLight2Z");
 lights.addColor(debugObject, "pointLight2Color").onChange((value) => {
   pointLight2.color.set(debugObject.pointLight2Color);
 });
+
+/**
+ * Worlds
+ */
+
+world1.rotation.z = Math.PI;
+world2.rotation.z = Math.PI;
+
+finalScene.add(world1, world2);
+scene.add(finalScene);
+
 /**
  * Sizes
  */
@@ -417,6 +456,10 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
  * Animate
  */
 
+nextButton.addEventListener("click", () => {
+  finalScene.rotation.z += Math.PI;
+});
+
 //is number even(pair)
 const isEven = (number) => {
   return number % 2 === 0;
@@ -434,12 +477,15 @@ const tick = () => {
     mixer.update(deltaTime);
   }
 
-  model.rotation.y += deltaTime * 0.8;
+  phone.rotation.y += deltaTime * 0.8;
+  paint.rotation.y += deltaTime * 0.3;
+  paint.rotation.x += deltaTime * 0.2;
   if (isEven(Math.floor(elapsedTime * 2))) {
     pointLight2.intensity = 0;
   } else {
     pointLight2.intensity = 4;
   }
+  // finalScene.rotation.z = Math.PI * (elapsedTime * 0.1);
 
   // Update controls
   controls.update();
