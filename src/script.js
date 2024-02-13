@@ -28,29 +28,6 @@ scene.add(axesHelper);
 
 const textureLoader = new THREE.TextureLoader();
 
-// //Floor
-// const floorColorTexture = textureLoader.load(
-//   "/textures/floor2/wood_cabinet_worn_long_diff_4k.jpg"
-// );
-
-// floorColorTexture.colorSpace = THREE.SRGBColorSpace;
-// const floorNormalTexture = textureLoader.load(
-//   "/textures/floor2/wood_cabinet_worn_long_nor_gl_4k.exr"
-// );
-// const floorRoughnessTexture = textureLoader.load(
-//   "/textures/floor2/wood_cabinet_worn_long_rough_gl_4k.exr"
-// );
-const floorColorTexture = textureLoader.load(
-  "/textures/floor/laminate_floor_03_diff_4k.jpg"
-);
-floorColorTexture.colorSpace = THREE.SRGBColorSpace;
-const floorNormalTexture = textureLoader.load(
-  "/textures/floor/laminate_floor_03_nor_gl_4k.exr"
-);
-const floorRoughnessTexture = textureLoader.load(
-  "/textures/floor/laminate_floor_03_rough_gl_4k.exr"
-);
-
 /**
  * Models
  */
@@ -87,42 +64,57 @@ gltfLoader.load("/models/phone.glb", (gltf) => {
 /**
  * Floor
  */
+
+/**
+ * Background 1
+ */
 const backgroundGroup = new THREE.Group();
 
 debugObject.wallColor = "#010A0C";
 
 const floor = new THREE.Mesh(
-  new THREE.PlaneGeometry(10, 10),
+  new THREE.PlaneGeometry(5, 5),
   new THREE.MeshStandardMaterial({
-    // color: debugObject.wallColor,
+    color: debugObject.wallColor,
     metalness: 0,
     roughness: 0.5,
-    map: floorColorTexture,
-    normalMap: floorNormalTexture,
-    roughnessMap: floorRoughnessTexture,
-    transparent: true,
-    opacity: 0.8,
+    side: THREE.DoubleSide,
   })
 );
 floor.receiveShadow = true;
 floor.rotation.x = -Math.PI * 0.5;
 backgroundGroup.add(floor);
 
-const wall1 = new THREE.Mesh(
-  new THREE.PlaneGeometry(10, 10),
+const roof = new THREE.Mesh(
+  new THREE.PlaneGeometry(5, 5),
   new THREE.MeshStandardMaterial({
     color: debugObject.wallColor,
     metalness: 0,
     roughness: 0.5,
+    side: THREE.DoubleSide,
+  })
+);
+roof.receiveShadow = true;
+roof.rotation.x = -Math.PI * 0.5;
+roof.position.y = 5;
+backgroundGroup.add(roof);
+
+const wall1 = new THREE.Mesh(
+  new THREE.PlaneGeometry(5, 5),
+  new THREE.MeshStandardMaterial({
+    color: debugObject.wallColor,
+    metalness: 0,
+    roughness: 0.5,
+    side: THREE.DoubleSide,
   })
 );
 wall1.rotation.z = Math.PI;
-wall1.position.z = -5;
-wall1.position.y = 5;
+wall1.position.z = -2.5;
+wall1.position.y = 2.5;
 backgroundGroup.add(wall1);
 
 const wall2 = new THREE.Mesh(
-  new THREE.PlaneGeometry(10, 10),
+  new THREE.PlaneGeometry(5, 5),
   new THREE.MeshStandardMaterial({
     color: debugObject.wallColor,
     metalness: 0,
@@ -131,12 +123,12 @@ const wall2 = new THREE.Mesh(
   })
 );
 wall2.rotation.z = Math.PI;
-wall2.position.z = 5;
-wall2.position.y = 5;
+wall2.position.z = 2.5;
+wall2.position.y = 2.5;
 backgroundGroup.add(wall2);
 
 const wall3 = new THREE.Mesh(
-  new THREE.PlaneGeometry(10, 10),
+  new THREE.PlaneGeometry(5, 5),
   new THREE.MeshStandardMaterial({
     color: debugObject.wallColor,
     metalness: 0,
@@ -144,15 +136,99 @@ const wall3 = new THREE.Mesh(
     side: THREE.DoubleSide,
   })
 );
-// wall3.rotation.z = Msath.PI;
 wall3.rotation.y = Math.PI * 0.5;
-wall3.position.y = 5;
-wall3.position.x = 5;
+wall3.position.y = 2.5;
+wall3.position.x = 2.5;
 backgroundGroup.add(wall3);
 
 backgroundGroup.rotation.y = Math.PI * 0.5;
+backgroundGroup.position.y = -1;
+backgroundGroup.position.z = 3;
 
 scene.add(backgroundGroup);
+
+/**
+ * Background 2
+ */
+const secondBackgroundGroup = new THREE.Group();
+
+debugObject.wallColor = "#010A0C";
+
+const secondFloor = new THREE.Mesh(
+  new THREE.PlaneGeometry(5, 5),
+  new THREE.MeshStandardMaterial({
+    color: debugObject.wallColor,
+    metalness: 0,
+    roughness: 0.5,
+    side: THREE.DoubleSide,
+  })
+);
+secondFloor.receiveShadow = true;
+secondFloor.rotation.x = -Math.PI * 0.5;
+secondBackgroundGroup.add(secondFloor);
+
+const secondRoof = new THREE.Mesh(
+  new THREE.PlaneGeometry(5, 5),
+  new THREE.MeshStandardMaterial({
+    color: debugObject.wallColor,
+    metalness: 0,
+    roughness: 0.5,
+    side: THREE.DoubleSide,
+  })
+);
+secondRoof.receiveShadow = true;
+secondRoof.rotation.x = -Math.PI * 0.5;
+secondRoof.position.y = 5;
+secondBackgroundGroup.add(secondRoof);
+
+const secondWall1 = new THREE.Mesh(
+  new THREE.PlaneGeometry(5, 5),
+  new THREE.MeshStandardMaterial({
+    color: debugObject.wallColor,
+    metalness: 0,
+    roughness: 0.5,
+    side: THREE.DoubleSide,
+  })
+);
+secondWall1.rotation.z = Math.PI;
+secondWall1.position.z = -2.5;
+secondWall1.position.y = 2.5;
+secondBackgroundGroup.add(secondWall1);
+
+const secondWall2 = new THREE.Mesh(
+  new THREE.PlaneGeometry(5, 5),
+  new THREE.MeshStandardMaterial({
+    color: debugObject.wallColor,
+    metalness: 0,
+    roughness: 0.5,
+    side: THREE.DoubleSide,
+  })
+);
+secondWall2.rotation.z = Math.PI;
+secondWall2.position.z = 2.5;
+secondWall2.position.y = 2.5;
+secondBackgroundGroup.add(secondWall2);
+
+const secondWall3 = new THREE.Mesh(
+  new THREE.PlaneGeometry(5, 5),
+  new THREE.MeshStandardMaterial({
+    color: debugObject.wallColor,
+    metalness: 0,
+    roughness: 0.5,
+    side: THREE.DoubleSide,
+  })
+);
+secondWall3.rotation.y = Math.PI * 0.5;
+secondWall3.position.y = 2.5;
+secondWall3.position.x = 2.5;
+secondBackgroundGroup.add(secondWall3);
+
+secondBackgroundGroup.rotation.y = Math.PI * 1.5;
+secondBackgroundGroup.rotation.x = Math.PI;
+secondBackgroundGroup.position.y = -1;
+secondBackgroundGroup.position.z = 3;
+
+scene.add(secondBackgroundGroup);
 
 const background = gui.addFolder("background");
 background
@@ -181,7 +257,7 @@ const lights = gui.addFolder("Lights");
 const ambientLight = new THREE.AmbientLight(0xffffff, 2.4);
 scene.add(ambientLight);
 
-debugObject.directionalLightColor = "#F4CC7F";
+debugObject.directionalLightColor = "#f4cc7f";
 
 const directionalLight = new THREE.DirectionalLight(
   debugObject.directionalLightColor,
@@ -213,10 +289,10 @@ lights.addColor(debugObject, "directionalLightColor").onChange((value) => {
 
 //SpotLight
 
-debugObject.spotLightColor = "#41B46C";
+debugObject.spotLightColor = "#ffa200";
 const spotLight = new THREE.SpotLight(
   debugObject.spotLightColor,
-  15.5,
+  10.5,
   10,
   Math.PI * 0.2,
   0.25,
@@ -226,7 +302,7 @@ spotLight.position.y = 8;
 spotLight.position.z = 5.5;
 spotLight.castShadow = true;
 
-spotLight.target.position.set(0, 3, 3);
+spotLight.target.position.set(0, 1.5, 3);
 scene.add(spotLight.target);
 
 scene.add(spotLight);
@@ -243,16 +319,16 @@ lights.addColor(debugObject, "spotLightColor").onChange((value) => {
 });
 
 //PointsLight
-debugObject.pointLight1Color = "#B6EDA2";
-debugObject.pointLight2Color = "#B6EDA2";
+debugObject.pointLight1Color = "#e5cc2a";
+debugObject.pointLight2Color = "#ff0033";
 const pointLight1 = new THREE.PointLight(
   debugObject.pointLight1Color,
   3.5,
   3,
   3
 );
-pointLight1.position.y = 4;
-pointLight1.position.z = 4;
+pointLight1.position.y = 1;
+pointLight1.position.z = 3.7;
 pointLight1.position.x = 1;
 scene.add(pointLight1);
 
@@ -340,6 +416,12 @@ renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 /**
  * Animate
  */
+
+//is number even(pair)
+const isEven = (number) => {
+  return number % 2 === 0;
+};
+
 const clock = new THREE.Clock();
 let previousTime = 0;
 
@@ -352,9 +434,13 @@ const tick = () => {
     mixer.update(deltaTime);
   }
 
-  model.rotation.y += deltaTime * 0.5;
-  //   model.rotation.x = Math.sin(elapsedTime * 0.01);
-  //   model.rotation.z = Math.sin(elapsedTime * 0.01);
+  model.rotation.y += deltaTime * 0.8;
+  if (isEven(Math.floor(elapsedTime * 2))) {
+    pointLight2.intensity = 0;
+  } else {
+    pointLight2.intensity = 4;
+  }
+
   // Update controls
   controls.update();
 
