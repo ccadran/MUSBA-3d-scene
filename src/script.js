@@ -2,6 +2,11 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
+import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
+import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass";
+import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
+
+import gsap from "gsap";
 import GUI from "lil-gui";
 
 const nextButton = document.getElementById("next");
@@ -392,10 +397,11 @@ lights.addColor(debugObject, "pointLight2Color").onChange((value) => {
  * Worlds
  */
 
-world1.rotation.z = Math.PI;
-world2.rotation.z = Math.PI;
+// world1.rotation.z = Math.PI;
+// world2.rotation.z = Math.PI;
 
 finalScene.add(world1, world2);
+// finalScene.position.y = 1;
 scene.add(finalScene);
 
 /**
@@ -436,7 +442,7 @@ gui.add(camera.position, "y", -20, 20, 0.1).name("cameraPositionY");
 gui.add(camera.position, "z", -20, 20, 0.1).name("cameraPositionZ");
 scene.add(camera);
 
-// Controls
+// // Controls
 const controls = new OrbitControls(camera, canvas);
 controls.target.set(0, 1, 0);
 controls.enableDamping = true;
@@ -453,11 +459,38 @@ renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 
 /**
+ * Post processing
+ */
+
+const effectComposer = new EffectComposer(renderer);
+effectComposer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+effectComposer.setSize(sizes.width, sizes.height);
+
+const renderPass = new RenderPass(scene, camera);
+effectComposer.addPass(renderPass);
+
+const glitchPass = new GlitchPass();
+glitchPass.enabled = false;
+effectComposer.addPass(glitchPass);
+/**
  * Animate
  */
 
 nextButton.addEventListener("click", () => {
-  finalScene.rotation.z += Math.PI;
+  gsap.to(finalScene.rotation, {
+    z: finalScene.rotation.z + Math.PI,
+    duration: 2,
+    ease: "power3.inOut",
+  });
+
+  glitchPass.enabled = true;
+  setTimeout(() => {
+    glitchPass.enabled = false;
+  }, 1600);
+});
+
+window.addEventListener("scroll", () => {
+  console.log("test scroll");
 });
 
 //is number even(pair)
@@ -491,7 +524,8 @@ const tick = () => {
   controls.update();
 
   // Render
-  renderer.render(scene, camera);
+  // renderer.render(scene, camera);
+  effectComposer.render();
 
   // Call tick again on the next frame
   window.requestAnimationFrame(tick);
