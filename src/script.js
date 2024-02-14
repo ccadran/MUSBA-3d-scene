@@ -17,8 +17,17 @@ console.log(prevButton);
  * Base
  */
 // Debug
-const gui = new GUI();
+const gui = new GUI({
+  title: "Debug Panel",
+});
 
+gui.hide();
+
+window.addEventListener("keydown", (e) => {
+  if (e.key == "h") {
+    gui.show(gui._hidden);
+  }
+});
 const debugObject = {};
 
 // Canvas
@@ -29,7 +38,7 @@ const scene = new THREE.Scene();
 
 const axesHelper = new THREE.AxesHelper(5);
 
-scene.add(axesHelper);
+// scene.add(axesHelper);
 
 /**
  * Textures
@@ -299,11 +308,11 @@ const directionalLight = new THREE.DirectionalLight(
 );
 directionalLight.castShadow = true;
 directionalLight.shadow.mapSize.set(1024, 1024);
-// directionalLight.shadow.camera.far = 15;
-// directionalLight.shadow.camera.left = -7;
-// directionalLight.shadow.camera.top = 7;
-// directionalLight.shadow.camera.right = 7;
-// directionalLight.shadow.camera.bottom = -7;
+directionalLight.shadow.camera.far = 15;
+directionalLight.shadow.camera.left = -7;
+directionalLight.shadow.camera.top = 7;
+directionalLight.shadow.camera.right = 7;
+directionalLight.shadow.camera.bottom = -7;
 directionalLight.position.set(5, 5, 5);
 scene.add(directionalLight);
 
@@ -341,10 +350,6 @@ scene.add(spotLight.target);
 
 scene.add(spotLight);
 
-// Helper;
-const helper = new THREE.SpotLightHelper(spotLight);
-scene.add(helper);
-
 lights.add(spotLight.position, "x", 0, 10, 0.1).name("spotLightX");
 lights.add(spotLight.position, "y", 0, 10, 0.1).name("spotLightY");
 lights.add(spotLight.position, "z", 0, 10, 0.1).name("spotLightZ");
@@ -379,7 +384,7 @@ scene.add(pointLight2);
 
 const pointLight1Helper = new THREE.PointLightHelper(pointLight1);
 const pointLightHelper2 = new THREE.PointLightHelper(pointLight2);
-scene.add(pointLight1Helper, pointLightHelper2);
+// scene.add(pointLight1Helper, pointLightHelper2);
 
 lights.add(pointLight1.position, "x", 0, 10, 0.1).name("pointLight1X");
 lights.add(pointLight1.position, "y", 0, 10, 0.1).name("pointLight1Y");
@@ -443,7 +448,7 @@ gui.add(camera.position, "y", -20, 20, 0.1).name("cameraPositionY");
 gui.add(camera.position, "z", -20, 20, 0.1).name("cameraPositionZ");
 scene.add(camera);
 
-// // Controls
+// Controls
 const controls = new OrbitControls(camera, canvas);
 controls.target.set(0, 1, 0);
 controls.enableDamping = true;
