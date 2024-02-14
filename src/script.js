@@ -314,6 +314,7 @@ directionalLight.shadow.camera.top = 7;
 directionalLight.shadow.camera.right = 7;
 directionalLight.shadow.camera.bottom = -7;
 directionalLight.position.set(5, 5, 5);
+directionalLight.shadow.bias = -0.015;
 scene.add(directionalLight);
 
 lights
@@ -344,6 +345,7 @@ const spotLight = new THREE.SpotLight(
 spotLight.position.y = 8;
 spotLight.position.z = 5.5;
 spotLight.castShadow = true;
+spotLight.shadow.bias = -0.005;
 
 spotLight.target.position.set(0, 1.5, 3);
 scene.add(spotLight.target);
@@ -392,6 +394,7 @@ lights.add(pointLight1.position, "z", 0, 10, 0.1).name("pointLight1Z");
 lights.addColor(debugObject, "pointLight1Color").onChange((value) => {
   pointLight1.color.set(debugObject.pointLight1Color);
 });
+
 lights.add(pointLight2.position, "x", 0, 10, 0.1).name("pointLight2X");
 lights.add(pointLight2.position, "y", 0, 10, 0.1).name("pointLight2Y");
 lights.add(pointLight2.position, "z", 0, 10, 0.1).name("pointLight2Z");
@@ -458,11 +461,13 @@ controls.enableDamping = true;
  */
 const renderer = new THREE.WebGLRenderer({
   canvas: canvas,
+  antialias: true,
 });
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
 renderer.setSize(sizes.width, sizes.height);
 renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.toneMapping = THREE.ReinhardToneMapping;
 
 /**
  * Post processing
