@@ -9,8 +9,9 @@ import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import gsap from "gsap";
 import GUI from "lil-gui";
 
-const nextButton = document.getElementById("next");
-console.log(nextButton);
+const nextButton = document.querySelector(".right-arrow");
+const prevButton = document.querySelector(".left-arrow");
+console.log(prevButton);
 
 /**
  * Base
@@ -476,21 +477,44 @@ effectComposer.addPass(glitchPass);
  * Animate
  */
 
-nextButton.addEventListener("click", () => {
+const moveSceneRight = () => {
+  gsap.to(finalScene.rotation, {
+    z: finalScene.rotation.z - Math.PI,
+    duration: 2,
+    ease: "power3.inOut",
+  });
+  glitchPass.enabled = true;
+  setTimeout(() => {
+    glitchPass.enabled = false;
+  }, 1600);
+};
+
+const moveSceneLeft = () => {
   gsap.to(finalScene.rotation, {
     z: finalScene.rotation.z + Math.PI,
     duration: 2,
     ease: "power3.inOut",
   });
-
   glitchPass.enabled = true;
   setTimeout(() => {
     glitchPass.enabled = false;
   }, 1600);
+};
+
+nextButton.addEventListener("click", () => {
+  moveSceneRight();
+});
+prevButton.addEventListener("click", () => {
+  moveSceneLeft();
 });
 
-window.addEventListener("scroll", () => {
-  console.log("test scroll");
+window.addEventListener("keydown", (e) => {
+  console.log(e);
+  if (e.key === "ArrowRight") {
+    moveSceneRight();
+  } else if (e.key === "ArrowLeft") {
+    moveSceneLeft();
+  }
 });
 
 //is number even(pair)

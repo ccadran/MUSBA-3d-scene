@@ -6,6 +6,8 @@
 html,
 body {
   overflow: hidden;
+  display: flex;
+  justify-content: center;
 }
 
 .webgl {
@@ -14,8 +16,31 @@ body {
   left: 0;
   outline: none;
 }
-button {
+h4 {
   position: absolute;
-  z-index: 10;
   width: 50%;
+  text-align: center;
+  color: white;
+  margin-top: 24px;
+}
+
+.change-model {
+  position: absolute;
+  bottom: 10px;
+  width: 70%;
+  display: flex;
+  justify-content: space-between;
+  img {
+    width: 50px;
+    height: 50px;
+  }
+  .left-arrow {
+    cursor: pointer;
+    img {
+      transform: rotate(180deg);
+    }
+  }
+  .right-arrow {
+    cursor: pointer;
+  }
 }
