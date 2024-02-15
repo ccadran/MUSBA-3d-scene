@@ -1,4 +1,6 @@
 import * as THREE from "three";
+import particulesVertexShader from "./shaders/particules/vertex.glsl";
+import particulesFragmentShader from "./shaders/particules/fragment.glsl";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
@@ -102,6 +104,45 @@ gltfLoader.load("/models/paint.glb", (gltf) => {
   world2.add(paint);
   tick();
 });
+
+/**
+ * Particles
+ */
+
+//Geometry
+const particlesGeometry = new THREE.BufferGeometry(1, 32, 32);
+const count = 150;
+
+const positions = new Float32Array(count * 3);
+const colors = new Float32Array(count * 3);
+
+for (let i = 0; i < count * 3; i++) {
+  positions[i] = (Math.random() - 0.5) * 5;
+  colors[i] = Math.random();
+}
+
+particlesGeometry.setAttribute(
+  "position",
+  new THREE.BufferAttribute(positions, 3)
+);
+particlesGeometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+
+//Material
+//
+
+const particlesMaterial = new THREE.ShaderMaterial({
+  depthWrite: true,
+  blending: THREE.AdditiveBlending,
+  vertexColors: true,
+  vertexShader: particulesVertexShader,
+  fragmentShader: particulesFragmentShader,
+});
+
+//Points
+const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+particles.position.y = 1;
+particles.position.z = 1;
+scene.add(particles);
 
 /**
  * Background 1
@@ -564,3 +605,5 @@ const tick = () => {
   // Call tick again on the next frame
   window.requestAnimationFrame(tick);
 };
+
+tick();
