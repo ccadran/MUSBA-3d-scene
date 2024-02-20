@@ -109,40 +109,43 @@ gltfLoader.load("/models/paint.glb", (gltf) => {
  * Particles
  */
 
-//Geometry
-const particlesGeometry = new THREE.BufferGeometry(1, 32, 32);
-const count = 150;
+const particulesExplosion = () => {
+  //Geometry
+  const particlesGeometry = new THREE.BufferGeometry(1, 32, 32);
+  const count = 150;
 
-const positions = new Float32Array(count * 3);
-const colors = new Float32Array(count * 3);
+  const positions = new Float32Array(count * 3);
+  const colors = new Float32Array(count * 3);
 
-for (let i = 0; i < count * 3; i++) {
-  positions[i] = (Math.random() - 0.5) * 5;
-  colors[i] = Math.random();
-}
+  for (let i = 0; i < count * 3; i++) {
+    positions[i] = (Math.random() - 0.5) * 6;
+    colors[i] = Math.random();
+  }
 
-particlesGeometry.setAttribute(
-  "position",
-  new THREE.BufferAttribute(positions, 3)
-);
-particlesGeometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+  particlesGeometry.setAttribute(
+    "position",
+    new THREE.BufferAttribute(positions, 3)
+  );
+  particlesGeometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
 
-//Material
-//
+  //Material
+  //
 
-const particlesMaterial = new THREE.ShaderMaterial({
-  depthWrite: true,
-  blending: THREE.AdditiveBlending,
-  vertexColors: true,
-  vertexShader: particulesVertexShader,
-  fragmentShader: particulesFragmentShader,
-});
+  const particlesMaterial = new THREE.ShaderMaterial({
+    depthWrite: true,
+    blending: THREE.AdditiveBlending,
+    vertexColors: true,
+    vertexShader: particulesVertexShader,
+    fragmentShader: particulesFragmentShader,
+  });
 
-//Points
-const particles = new THREE.Points(particlesGeometry, particlesMaterial);
-particles.position.y = 1;
-particles.position.z = 1;
-scene.add(particles);
+  //Points
+  const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+  particles.position.y = 1.5;
+  particles.position.z = 1.5;
+  scene.add(particles);
+};
+particulesExplosion();
 
 /**
  * Background 1
@@ -549,6 +552,8 @@ const moveSceneLeft = () => {
   glitchPass.enabled = true;
   setTimeout(() => {
     glitchPass.enabled = false;
+    particlesPosition = 6;
+    console.log(particlesPosition);
   }, 1600);
 };
 
