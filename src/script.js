@@ -115,11 +115,21 @@ const particulesExplosion = () => {
   const count = 150;
 
   const positions = new Float32Array(count * 3);
+  const finalPositions = new Float32Array(count * 3);
   const colors = new Float32Array(count * 3);
 
-  for (let i = 0; i < count * 3; i++) {
-    positions[i] = (Math.random() - 0.5) * 6;
-    colors[i] = Math.random();
+  // Initialisation des positions à (0, 0, 0)
+  for (let i = 0; i < count; i++) {
+    const i3 = i * 3;
+    positions[i3] = 0;
+    positions[i3 + 1] = 0;
+    positions[i3 + 2] = 0;
+    finalPositions[i3] = (Math.random() - 0.5) * 6;
+    finalPositions[i3 + 1] = (Math.random() - 0.5) * 6;
+    finalPositions[i3 + 2] = (Math.random() - 0.5) * 6;
+    colors[i3] = Math.random();
+    colors[i3 + 1] = Math.random();
+    colors[i3 + 2] = Math.random();
   }
 
   particlesGeometry.setAttribute(
@@ -127,10 +137,12 @@ const particulesExplosion = () => {
     new THREE.BufferAttribute(positions, 3)
   );
   particlesGeometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+  particlesGeometry.setAttribute(
+    "finalPosition",
+    new THREE.BufferAttribute(finalPositions, 3)
+  );
 
   //Material
-  //
-
   const particlesMaterial = new THREE.ShaderMaterial({
     depthWrite: true,
     blending: THREE.AdditiveBlending,
@@ -144,6 +156,15 @@ const particulesExplosion = () => {
   particles.position.y = 1.5;
   particles.position.z = 1.5;
   scene.add(particles);
+
+  // Après un certain délai, mettez à jour les positions des particules
+  setTimeout(() => {
+    for (let i = 0; i < count * 3; i++) {
+      positions[i] = (Math.random() - 0.5) * 6;
+    }
+    particlesGeometry.attributes.position.needsUpdate = true; // Mise à jour des positions
+    console.log("test");
+  }, 6000); // par exemple, 2000 pour un délai de 2 secondes
 };
 particulesExplosion();
 
