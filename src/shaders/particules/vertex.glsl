@@ -4,7 +4,6 @@ uniform float startTime;
 
 
 varying vec2 vUv;
-varying vec3 vColor;
 varying float vUtime;
 
 
@@ -20,6 +19,5 @@ void main() {
     gl_PointSize = 1.5;
 
     vUv=uv;
-    vColor=color;
     vUtime= uTime;
 }

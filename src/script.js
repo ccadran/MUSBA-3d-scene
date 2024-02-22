@@ -13,7 +13,6 @@ import GUI from "lil-gui";
 
 const nextButton = document.querySelector(".right-arrow");
 const prevButton = document.querySelector(".left-arrow");
-console.log(prevButton);
 
 /**
  * Base

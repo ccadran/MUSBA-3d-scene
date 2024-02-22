@@ -16,6 +16,12 @@ body {
   left: 0;
   outline: none;
 }
+.loader {
+  background-color: red;
+  height: 100%;
+  width: 100%;
+  position: absolute;
+}
 
 .html-3d-scene {
   width: 100%;
@@ -23,6 +29,7 @@ body {
   position: absolute;
   display: flex;
   justify-content: center;
+  opacity: 0%;
 }
 .title {
   display: flex;
