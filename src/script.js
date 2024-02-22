@@ -110,8 +110,6 @@ gltfLoader.load("/models/paint.glb", (gltf) => {
  */
 const uniformsOfParticles = {
   uTime: { value: 0 },
-  duration: { value: 2000 },
-  startTime: { value: Date.now() },
 };
 
 let particles = null;
@@ -122,7 +120,7 @@ const particulesExplosion = () => {
     particlesMaterial.dispose();
     scene.remove(particles);
   } //Geometry
-  const particlesGeometry = new THREE.BufferGeometry(1, 32, 32);
+  const particlesGeometry = new THREE.PlaneGeometry(1, 1, 32, 32);
   const count = 150;
 
   const positions = new Float32Array(count * 3);
@@ -136,6 +134,7 @@ const particulesExplosion = () => {
     positions[i3] = (Math.random() - 0.5) * 6;
     positions[i3 + 1] = (Math.random() - 0.5) * 6;
     positions[i3 + 2] = (Math.random() - 0.5) * 6;
+
     colors[i3] = Math.random();
     colors[i3 + 1] = Math.random();
     colors[i3 + 2] = Math.random();
@@ -146,10 +145,6 @@ const particulesExplosion = () => {
     new THREE.BufferAttribute(positions, 3)
   );
   particlesGeometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
-  // particlesGeometry.setAttribute(
-  //   "finalPosition",
-  //   new THREE.BufferAttribute(finalPositions, 3)
-  // );
 
   //Material
   const particlesMaterial = new THREE.ShaderMaterial({
@@ -164,11 +159,27 @@ const particulesExplosion = () => {
   //Points
   particles = new THREE.Points(particlesGeometry, particlesMaterial);
   particles.position.y = 1.5;
-  particles.position.z = 4.5;
+  particles.position.z = 3.5;
   scene.add(particles);
 };
 particulesExplosion();
 
+// Geometry
+const geometry = new THREE.PlaneGeometry(1, 1, 32, 32);
+
+// Material
+const material = new THREE.ShaderMaterial({
+  vertexShader: particulesVertexShader,
+  fragmentShader: particulesFragmentShader,
+  uniforms: {
+    uTime: { value: 0 },
+  },
+  side: THREE.DoubleSide,
+});
+
+// Mesh
+const mesh = new THREE.Mesh(geometry, material);
+scene.add(mesh);
 /**
  * Background 1
  */
@@ -639,14 +650,11 @@ const tick = () => {
 
   const parallaxX = cursor.x * 0.5;
   const parallaxY = -cursor.y * 0.5;
-  // camera.position.x += (parallaxX - camera.position.x) * 5 * deltaTime;
-  // camera.position.y += (parallaxY - camera.position.y) * 5 * deltaTime;
-  console.log(parallaxY, camera.position.y);
+
   cameraGroup.position.x +=
     (parallaxX - cameraGroup.position.x) * 5 * deltaTime;
   cameraGroup.position.y +=
     (parallaxY - cameraGroup.position.y) * 5 * deltaTime;
-  console.log(camera.position.y);
   // Update controls
   controls.update();
 
