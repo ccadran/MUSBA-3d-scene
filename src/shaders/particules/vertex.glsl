@@ -17,7 +17,7 @@ void main() {
     vec4 viewPosition = viewMatrix * modelPosition;
     vec4 projectedPosition = projectionMatrix * viewPosition;
     gl_Position = projectedPosition;
-    gl_PointSize = 1.0;
+    gl_PointSize = 1.5;
 
     vUv=uv;
     vColor=color;
