@@ -108,9 +108,20 @@ gltfLoader.load("/models/paint.glb", (gltf) => {
 /**
  * Particles
  */
+const uniformsOfParticles = {
+  uTime: { value: 0 },
+  duration: { value: 2000 },
+  startTime: { value: Date.now() },
+};
+
+let particles = null;
 
 const particulesExplosion = () => {
-  //Geometry
+  if (particles !== null) {
+    particlesGeometry.dispose();
+    particlesMaterial.dispose();
+    scene.remove(particles);
+  } //Geometry
   const particlesGeometry = new THREE.BufferGeometry(1, 32, 32);
   const count = 150;
 
@@ -121,12 +132,10 @@ const particulesExplosion = () => {
   // Initialisation des positions à (0, 0, 0)
   for (let i = 0; i < count; i++) {
     const i3 = i * 3;
-    positions[i3] = 0;
-    positions[i3 + 1] = 0;
-    positions[i3 + 2] = 0;
-    finalPositions[i3] = (Math.random() - 0.5) * 6;
-    finalPositions[i3 + 1] = (Math.random() - 0.5) * 6;
-    finalPositions[i3 + 2] = (Math.random() - 0.5) * 6;
+
+    positions[i3] = (Math.random() - 0.5) * 6;
+    positions[i3 + 1] = (Math.random() - 0.5) * 6;
+    positions[i3 + 2] = (Math.random() - 0.5) * 6;
     colors[i3] = Math.random();
     colors[i3 + 1] = Math.random();
     colors[i3 + 2] = Math.random();
@@ -137,10 +146,10 @@ const particulesExplosion = () => {
     new THREE.BufferAttribute(positions, 3)
   );
   particlesGeometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
-  particlesGeometry.setAttribute(
-    "finalPosition",
-    new THREE.BufferAttribute(finalPositions, 3)
-  );
+  // particlesGeometry.setAttribute(
+  //   "finalPosition",
+  //   new THREE.BufferAttribute(finalPositions, 3)
+  // );
 
   //Material
   const particlesMaterial = new THREE.ShaderMaterial({
@@ -149,22 +158,14 @@ const particulesExplosion = () => {
     vertexColors: true,
     vertexShader: particulesVertexShader,
     fragmentShader: particulesFragmentShader,
+    uniforms: uniformsOfParticles,
   });
 
   //Points
-  const particles = new THREE.Points(particlesGeometry, particlesMaterial);
+  particles = new THREE.Points(particlesGeometry, particlesMaterial);
   particles.position.y = 1.5;
-  particles.position.z = 1.5;
+  particles.position.z = 4.5;
   scene.add(particles);
-
-  // Après un certain délai, mettez à jour les positions des particules
-  setTimeout(() => {
-    for (let i = 0; i < count * 3; i++) {
-      positions[i] = (Math.random() - 0.5) * 6;
-    }
-    particlesGeometry.attributes.position.needsUpdate = true; // Mise à jour des positions
-    console.log("test");
-  }, 6000); // par exemple, 2000 pour un délai de 2 secondes
 };
 particulesExplosion();
 
@@ -504,6 +505,8 @@ window.addEventListener("resize", () => {
  * Camera
  */
 // Base camera
+const cameraGroup = new THREE.Group();
+
 const camera = new THREE.PerspectiveCamera(
   45,
   sizes.width / sizes.height,
@@ -511,10 +514,12 @@ const camera = new THREE.PerspectiveCamera(
   100
 );
 camera.position.set(0, 3.3, 7.5);
+console.log(camera.position);
 gui.add(camera.position, "x", -20, 20, 0.1).name("cameraPositionX");
 gui.add(camera.position, "y", -20, 20, 0.1).name("cameraPositionY");
 gui.add(camera.position, "z", -20, 20, 0.1).name("cameraPositionZ");
-scene.add(camera);
+cameraGroup.add(camera);
+scene.add(cameraGroup);
 
 // Controls
 const controls = new OrbitControls(camera, canvas);
@@ -559,6 +564,9 @@ const moveSceneRight = () => {
     ease: "power3.inOut",
   });
   glitchPass.enabled = true;
+
+  // uniformsOfParticles.startTime.value = Date.now();
+
   setTimeout(() => {
     glitchPass.enabled = false;
   }, 1600);
@@ -571,10 +579,9 @@ const moveSceneLeft = () => {
     ease: "power3.inOut",
   });
   glitchPass.enabled = true;
+  // uniformsOfParticles.startTime.value = Date.now();
   setTimeout(() => {
     glitchPass.enabled = false;
-    particlesPosition = 6;
-    console.log(particlesPosition);
   }, 1600);
 };
 
@@ -594,6 +601,13 @@ window.addEventListener("keydown", (e) => {
   }
 });
 
+const cursor = {};
+cursor.x = 0;
+cursor.y = 0;
+window.addEventListener("mousemove", (e) => {
+  cursor.x = e.clientX / sizes.width - 0.5;
+  cursor.y = e.clientY / sizes.height - 0.5;
+});
 //is number even(pair)
 const isEven = (number) => {
   return number % 2 === 0;
@@ -621,8 +635,25 @@ const tick = () => {
   }
   // finalScene.rotation.z = Math.PI * (elapsedTime * 0.1);
 
+  //Animate Camera
+
+  const parallaxX = cursor.x * 0.5;
+  const parallaxY = -cursor.y * 0.5;
+  // camera.position.x += (parallaxX - camera.position.x) * 5 * deltaTime;
+  // camera.position.y += (parallaxY - camera.position.y) * 5 * deltaTime;
+  console.log(parallaxY, camera.position.y);
+  cameraGroup.position.x +=
+    (parallaxX - cameraGroup.position.x) * 5 * deltaTime;
+  cameraGroup.position.y +=
+    (parallaxY - cameraGroup.position.y) * 5 * deltaTime;
+  console.log(camera.position.y);
   // Update controls
   controls.update();
+
+  uniformsOfParticles.uTime.value = elapsedTime;
+
+  // console.log("date now", Date.now(), "uTime", elapsedTime);
+  // console.log(elapsedTime - Date.now());
 
   // Render
   // renderer.render(scene, camera);

@@ -1,11 +1,15 @@
-attribute vec3 finalPosition;
+uniform float uTime;
+uniform float duration;
+uniform float startTime;
+
 
 
 void main() {
     vec4 modelPosition = modelMatrix * vec4(position, 1.0);
 
+
     vec4 viewPosition = viewMatrix * modelPosition;
     vec4 projectedPosition = projectionMatrix * viewPosition;
     gl_Position = projectedPosition;
-    gl_PointSize = 5.0;
+    gl_PointSize = 5.0 ;
 }
