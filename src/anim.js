@@ -9,11 +9,28 @@ const cursor2 = document.querySelector(".cursor2");
 enterExperience.addEventListener("click", () => {
   gsap.to(loader, {
     y: "100%",
+    duration: 1,
   });
   gsap.set(htmlContainer, {
     display: "flex",
   });
+  gsap.to(htmlContainer, {
+    opacity: "100%",
+    delay: 1,
+  });
+  gsap.set(cursor, {
+    display: "none",
+  });
+  gsap.set(cursor2, {
+    display: "none",
+  });
 });
+
+setTimeout(() => {
+  gsap.set(enterExperience, {
+    cursor: "pointer",
+  });
+}, [3000]);
 console.log(enterExperience, loader, htmlContainer);
 
 window.addEventListener("mousemove", (e) => {

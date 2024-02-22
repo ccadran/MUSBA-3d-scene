@@ -37,7 +37,7 @@ body {
     padding: 14px 60px;
     border-radius: 8px;
     font-family: "Chakra Petch", sans-serif;
-    cursor: pointer;
+    cursor: wait;
   }
   .cursor {
     height: 50px;
@@ -68,6 +68,7 @@ body {
   display: flex;
   justify-content: center;
   display: none;
+  opacity: 0;
 }
 .title {
   display: flex;
