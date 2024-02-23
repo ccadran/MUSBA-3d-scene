@@ -56,5 +56,3 @@ window.addEventListener("mousemove", (e) => {
     duration: 0.4,
   });
 });
-
-setTimeout(() => {}, [2000]);
