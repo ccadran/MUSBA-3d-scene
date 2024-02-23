@@ -38,9 +38,11 @@ body {
     background-color: white;
     padding: 14px 60px;
     border-radius: 8px;
+    width: 100px;
+    text-align: center;
     font-family: "Chakra Petch", sans-serif;
-    cursor: wait;
-    /* pointer-events: none; */
+    /* cursor: wait; */
+    pointer-events: none;
   }
   .cursor {
     height: 50px;

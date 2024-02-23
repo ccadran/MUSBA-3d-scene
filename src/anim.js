@@ -7,10 +7,6 @@ const cursor = document.querySelector(".cursor");
 const cursor2 = document.querySelector(".cursor2");
 
 enterExperience.addEventListener("click", () => {
-  // gsap.to(loader, {
-  //   y: "100%",
-  //   duration: 1,
-  // });
   gsap.set(htmlContainer, {
     display: "flex",
   });
@@ -35,7 +31,9 @@ enterExperience.addEventListener("click", () => {
 setTimeout(() => {
   gsap.set(enterExperience, {
     cursor: "pointer",
+    pointerEvents: "auto",
   });
+  enterExperience.innerHTML = "<h4>Enter</h4>";
 }, [3000]);
 console.log(enterExperience, loader, htmlContainer);
 
