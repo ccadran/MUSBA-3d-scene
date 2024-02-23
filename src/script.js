@@ -13,6 +13,7 @@ import GUI from "lil-gui";
 
 const nextButton = document.querySelector(".right-arrow");
 const prevButton = document.querySelector(".left-arrow");
+const enterExperience = document.querySelector(".enter");
 
 /**
  * Base
@@ -523,7 +524,16 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   100
 );
-camera.position.set(0, 3.3, 7.5);
+camera.position.set(0, 10.3, 3.5);
+enterExperience.addEventListener("click", () => {
+  gsap.to(camera.position, {
+    x: 0,
+    y: 3.3,
+    z: 7.5,
+    delay: 0.5,
+  });
+});
+
 console.log(camera.position);
 gui.add(camera.position, "x", -20, 20, 0.1).name("cameraPositionX");
 gui.add(camera.position, "y", -20, 20, 0.1).name("cameraPositionY");
