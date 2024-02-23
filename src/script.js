@@ -512,6 +512,7 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   100
 );
+camera.position.set(0, 10.3, 3.5);
 
 enterExperience.addEventListener("click", () => {
   gsap.to(camera.position, {
