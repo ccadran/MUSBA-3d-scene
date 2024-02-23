@@ -28,7 +28,7 @@ body {
   mask-image: radial-gradient(circle, transparent 0%, transparent 0%, black 0%);
   .img-container {
     height: 50%;
-    margin-top: 42px;
+    margin-top: 22px;
     img {
       height: 100%;
       width: 100%;
@@ -41,6 +41,7 @@ body {
     font-family: "Chakra Petch", sans-serif;
     margin-bottom: 34px;
     text-align: center;
+    width: 80%;
     @media screen and (max-width: 720px) {
       font-size: 42px;
     }
