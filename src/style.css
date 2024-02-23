@@ -22,17 +22,28 @@ body {
   width: 100%;
   position: absolute;
   display: flex;
-  justify-content: center;
+  /* justify-content: center; */
   align-items: center;
   flex-direction: column;
   mask-image: radial-gradient(circle, transparent 0%, transparent 0%, black 0%);
-
+  .img-container {
+    height: 50%;
+    margin-top: 42px;
+    img {
+      height: 100%;
+      width: 100%;
+      object-fit: cover;
+    }
+  }
   h1 {
     color: white;
     font-size: 74px;
     font-family: "Chakra Petch", sans-serif;
     margin-bottom: 34px;
     text-align: center;
+    @media screen and (max-width: 720px) {
+      font-size: 42px;
+    }
   }
   .enter {
     background-color: white;
@@ -53,6 +64,7 @@ body {
     mix-blend-mode: difference;
     z-index: 2;
     pointer-events: none;
+    display: none;
   }
   .cursor2 {
     height: 50px;
@@ -63,6 +75,7 @@ body {
     z-index: 1;
     mix-blend-mode: difference;
     pointer-events: none;
+    display: none;
   }
 }
 

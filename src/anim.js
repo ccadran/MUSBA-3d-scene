@@ -38,6 +38,13 @@ setTimeout(() => {
 console.log(enterExperience, loader, htmlContainer);
 
 window.addEventListener("mousemove", (e) => {
+  gsap.set(cursor, {
+    display: "block",
+  });
+  gsap.set(cursor2, {
+    display: "block",
+  });
+
   gsap.to(cursor, {
     left: e.x,
     top: e.y,

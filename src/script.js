@@ -23,7 +23,7 @@ const gui = new GUI({
   title: "Debug Panel",
 });
 
-// gui.hide();
+gui.hide();
 
 window.addEventListener("keydown", (e) => {
   if (e.key == "h") {
