@@ -23,7 +23,7 @@ const gui = new GUI({
   title: "Debug Panel",
 });
 
-gui.hide();
+// gui.hide();
 
 window.addEventListener("keydown", (e) => {
   if (e.key == "h") {
@@ -350,18 +350,12 @@ secondBackgroundGroup.position.z = 3;
 
 world2.add(secondBackgroundGroup);
 
-const background = gui.addFolder("background");
-background
-  .add(backgroundGroup.position, "x", -10, 10, 0.1)
-  .name("backgroundGroupX");
-background
-  .add(backgroundGroup.position, "y", -10, 10, 0.1)
-  .name("backgroundGroupY");
-background
-  .add(backgroundGroup.position, "z", -10, 10, 0.1)
-  .name("backgroundGroupZ");
+// const background = gui.addFolder("background");
+gui.add(backgroundGroup.position, "x", -10, 10, 0.1).name("backgroundGroupX");
+gui.add(backgroundGroup.position, "y", -10, 10, 0.1).name("backgroundGroupY");
+gui.add(backgroundGroup.position, "z", -10, 10, 0.1).name("backgroundGroupZ");
 
-background.addColor(debugObject, "wallColor").onChange((value) => {
+gui.addColor(debugObject, "wallColor").onChange((value) => {
   backgroundGroup.children.forEach((child) => {
     if (child instanceof THREE.Mesh) {
       child.material.color.set(debugObject.wallColor);
@@ -373,7 +367,7 @@ background.addColor(debugObject, "wallColor").onChange((value) => {
  * Lights 1
  */
 
-const lights = gui.addFolder("Lights");
+// const lights = gui.addFolder("Lights");
 const ambientLight = new THREE.AmbientLight(0xffffff, 2.4);
 scene.add(ambientLight);
 
@@ -394,17 +388,11 @@ directionalLight.position.set(5, 5, 5);
 directionalLight.shadow.bias = -0.015;
 scene.add(directionalLight);
 
-lights
-  .add(directionalLight.position, "x", 0, 10, 0.1)
-  .name("directionnalLightX");
-lights
-  .add(directionalLight.position, "y", 0, 10, 0.1)
-  .name("directionnalLightY");
-lights
-  .add(directionalLight.position, "z", 0, 10, 0.1)
-  .name("directionnalLightZ");
+gui.add(directionalLight.position, "x", 0, 10, 0.1).name("directionnalLightX");
+gui.add(directionalLight.position, "y", 0, 10, 0.1).name("directionnalLightY");
+gui.add(directionalLight.position, "z", 0, 10, 0.1).name("directionnalLightZ");
 
-lights.addColor(debugObject, "directionalLightColor").onChange((value) => {
+gui.addColor(debugObject, "directionalLightColor").onChange((value) => {
   directionalLight.color.set(debugObject.directionalLightColor);
 });
 
@@ -429,10 +417,10 @@ scene.add(spotLight.target);
 
 scene.add(spotLight);
 
-lights.add(spotLight.position, "x", 0, 10, 0.1).name("spotLightX");
-lights.add(spotLight.position, "y", 0, 10, 0.1).name("spotLightY");
-lights.add(spotLight.position, "z", 0, 10, 0.1).name("spotLightZ");
-lights.addColor(debugObject, "spotLightColor").onChange((value) => {
+gui.add(spotLight.position, "x", 0, 10, 0.1).name("spotLightX");
+gui.add(spotLight.position, "y", 0, 10, 0.1).name("spotLightY");
+gui.add(spotLight.position, "z", 0, 10, 0.1).name("spotLightZ");
+gui.addColor(debugObject, "spotLightColor").onChange((value) => {
   spotLight.color.set(debugObject.spotLightColor);
 });
 
@@ -465,17 +453,17 @@ const pointLight1Helper = new THREE.PointLightHelper(pointLight1);
 const pointLightHelper2 = new THREE.PointLightHelper(pointLight2);
 // scene.add(pointLight1Helper, pointLightHelper2);
 
-lights.add(pointLight1.position, "x", 0, 10, 0.1).name("pointLight1X");
-lights.add(pointLight1.position, "y", 0, 10, 0.1).name("pointLight1Y");
-lights.add(pointLight1.position, "z", 0, 10, 0.1).name("pointLight1Z");
-lights.addColor(debugObject, "pointLight1Color").onChange((value) => {
+gui.add(pointLight1.position, "x", 0, 10, 0.1).name("pointLight1X");
+gui.add(pointLight1.position, "y", 0, 10, 0.1).name("pointLight1Y");
+gui.add(pointLight1.position, "z", 0, 10, 0.1).name("pointLight1Z");
+gui.addColor(debugObject, "pointLight1Color").onChange((value) => {
   pointLight1.color.set(debugObject.pointLight1Color);
 });
 
-lights.add(pointLight2.position, "x", 0, 10, 0.1).name("pointLight2X");
-lights.add(pointLight2.position, "y", 0, 10, 0.1).name("pointLight2Y");
-lights.add(pointLight2.position, "z", 0, 10, 0.1).name("pointLight2Z");
-lights.addColor(debugObject, "pointLight2Color").onChange((value) => {
+gui.add(pointLight2.position, "x", 0, 10, 0.1).name("pointLight2X");
+gui.add(pointLight2.position, "y", 0, 10, 0.1).name("pointLight2Y");
+gui.add(pointLight2.position, "z", 0, 10, 0.1).name("pointLight2Z");
+gui.addColor(debugObject, "pointLight2Color").onChange((value) => {
   pointLight2.color.set(debugObject.pointLight2Color);
 });
 
@@ -535,6 +523,7 @@ enterExperience.addEventListener("click", () => {
 });
 
 console.log(camera.position);
+// const cameraFolder = gui.addFolder("camera");
 gui.add(camera.position, "x", -20, 20, 0.1).name("cameraPositionX");
 gui.add(camera.position, "y", -20, 20, 0.1).name("cameraPositionY");
 gui.add(camera.position, "z", -20, 20, 0.1).name("cameraPositionZ");
