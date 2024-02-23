@@ -25,6 +25,8 @@ body {
   justify-content: center;
   align-items: center;
   flex-direction: column;
+  mask-image: radial-gradient(circle, transparent 0%, transparent 0%, black 0%);
+
   h1 {
     color: white;
     font-size: 74px;
@@ -38,6 +40,7 @@ body {
     border-radius: 8px;
     font-family: "Chakra Petch", sans-serif;
     cursor: wait;
+    /* pointer-events: none; */
   }
   .cursor {
     height: 50px;

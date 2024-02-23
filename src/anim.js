@@ -7,10 +7,10 @@ const cursor = document.querySelector(".cursor");
 const cursor2 = document.querySelector(".cursor2");
 
 enterExperience.addEventListener("click", () => {
-  gsap.to(loader, {
-    y: "100%",
-    duration: 1,
-  });
+  // gsap.to(loader, {
+  //   y: "100%",
+  //   duration: 1,
+  // });
   gsap.set(htmlContainer, {
     display: "flex",
   });
@@ -23,6 +23,12 @@ enterExperience.addEventListener("click", () => {
   });
   gsap.set(cursor2, {
     display: "none",
+  });
+  gsap.to(loader, {
+    maskImage:
+      "radial-gradient(circle at center  bottom , transparent 0%, transparent 100%, black 100%)",
+    ease: "power3.inOut",
+    duration: 1,
   });
 });
 
