@@ -11,10 +11,73 @@ import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
 import gsap from "gsap";
 import GUI from "lil-gui";
 
+/**
+ * Basic animations
+ */
+
+const loader = document.querySelector(".loader");
+const htmlContainer = document.querySelector(".html-3d-scene");
+const enterExperience = document.querySelector(".enter");
+const cursorFollow = document.querySelector(".cursor");
+const cursorFollow2 = document.querySelector(".cursor2");
+
+enterExperience.addEventListener("click", () => {
+  gsap.set(htmlContainer, {
+    display: "flex",
+  });
+  gsap.to(htmlContainer, {
+    opacity: "100%",
+    delay: 1,
+  });
+  gsap.set(cursorFollow, {
+    display: "none",
+  });
+  gsap.set(cursorFollow2, {
+    display: "none",
+  });
+  gsap.to(loader, {
+    maskImage:
+      "radial-gradient(circle at center  bottom , transparent 0%, transparent 100%, black 100%)",
+    ease: "power3.inOut",
+    duration: 1,
+  });
+});
+
+setTimeout(() => {
+  gsap.set(enterExperience, {
+    cursor: "pointer",
+    pointerEvents: "auto",
+  });
+  enterExperience.innerHTML = "<h4>Enter</h4>";
+}, [3000]);
+console.log(enterExperience, loader, htmlContainer);
+
+window.addEventListener("mousemove", (e) => {
+  gsap.set(cursorFollow, {
+    display: "block",
+  });
+  gsap.set(cursorFollow2, {
+    display: "block",
+  });
+
+  gsap.to(cursorFollow, {
+    left: e.x,
+    top: e.y,
+    duration: 0.3,
+  });
+  gsap.to(cursorFollow2, {
+    left: e.x,
+    top: e.y,
+    duration: 0.4,
+  });
+});
+
+/**
+ * Three.js
+ */
+
 const nextButton = document.querySelector(".right-arrow");
 const prevButton = document.querySelector(".left-arrow");
-const enterExperience = document.querySelector(".enter");
-
 /**
  * Base
  */
