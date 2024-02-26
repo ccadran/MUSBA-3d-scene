@@ -49,7 +49,7 @@ setTimeout(() => {
     pointerEvents: "auto",
   });
   enterExperience.innerHTML = "<h4>Enter</h4>";
-}, [3000]);
+}, [3500]);
 console.log(enterExperience, loader, htmlContainer);
 
 window.addEventListener("mousemove", (e) => {
@@ -69,6 +69,14 @@ window.addEventListener("mousemove", (e) => {
     left: e.x,
     top: e.y,
     duration: 0.4,
+  });
+});
+
+enterExperience.addEventListener("mouseover", () => {
+  console.log("test");
+  gsap.to(enterExperience, {
+    color: "white",
+    ease: "power3.inOut",
   });
 });
 
