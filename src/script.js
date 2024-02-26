@@ -72,14 +72,6 @@ window.addEventListener("mousemove", (e) => {
   });
 });
 
-enterExperience.addEventListener("mouseover", () => {
-  console.log("test");
-  gsap.to(enterExperience, {
-    color: "white",
-    ease: "power3.inOut",
-  });
-});
-
 /**
  * Three.js
  */
