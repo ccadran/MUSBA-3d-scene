@@ -4,10 +4,8 @@ uniform float uProgress;
 
 attribute float aSize;
 attribute float aTimeMultiplier;
-attribute vec3 aColor;
 
 
-varying vec3 color;
 
 #include ../includes/remap.glsl
 
@@ -18,7 +16,7 @@ void main()
   float progress = uProgress * aTimeMultiplier;
 
   //Exploding
-  float explodingProgress = remap(progress, 0.0, 0.1, 0.0, 1.0);
+  float explodingProgress = remap(progress, 0.0, 0.4, 0.0, 1.0);
   explodingProgress = clamp(explodingProgress, 0.0, 1.0);
   explodingProgress = 1.0 - (pow(1.0 - explodingProgress, 3.0));
 //   newPosition *= explodingProgress;
@@ -32,9 +30,9 @@ void main()
 
   //Scaling
   float sizeOpeningProgress = remap(progress, 0.0, 0.125, 0.0, 1.0);
-  float sizeClosingProgress = remap(progress, 0.125, 1.0, 1.0, 0.0);
-  float sizeProgress = min(sizeOpeningProgress, sizeClosingProgress);
-  sizeProgress = clamp(sizeProgress, 0.0, 1.0);
+//   float sizeClosingProgress = remap(progress, 0.125, 1.0, 1.0, 0.0);
+//   float sizeProgress = min(sizeOpeningProgress, sizeClosingProgress);
+   float sizeProgress = clamp(sizeOpeningProgress, 0.0, 1.0);
 
   //Twinkling
   float twinklingProgress = remap(progress, 0.2, 0.8, 0.0, 1.0);
@@ -62,5 +60,4 @@ void main()
 
   //Varyings
 
-  color = aColor;
   }

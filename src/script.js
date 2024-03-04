@@ -192,7 +192,6 @@ const textures = [
 const createFirework = (count, position, size, texture, radius, color) => {
   //Geometry
   const positionsArray = new Float32Array(count * 3);
-  const colorArray = new Float32Array(count);
   const sizesArray = new Float32Array(count);
   const timeMultipliers = new Float32Array(count);
 
@@ -211,11 +210,6 @@ const createFirework = (count, position, size, texture, radius, color) => {
     positionsArray[i3 + 1] = position.y;
     positionsArray[i3 + 2] = position.z;
 
-    colorArray[i3 + 0] = Math.random() * 1;
-    colorArray[i3 + 1] = Math.random() * 1;
-    colorArray[i3 + 2] = Math.random() * 1;
-    // colorArray[i] = (Math.random() * 1, Math.random() * 1, Math.random() * 1);
-
     sizesArray[i] = Math.random();
 
     timeMultipliers[i] = 1 + Math.random();
@@ -233,10 +227,6 @@ const createFirework = (count, position, size, texture, radius, color) => {
   geometry.setAttribute(
     "aTimeMultiplier",
     new THREE.Float32BufferAttribute(timeMultipliers, 1)
-  );
-  geometry.setAttribute(
-    "aColor",
-    new THREE.Float32BufferAttribute(colorArray, 3)
   );
 
   //Material
@@ -262,7 +252,7 @@ const createFirework = (count, position, size, texture, radius, color) => {
   firework.position.z = 4;
   scene.add(firework);
 
-  //Destrouy
+  //Destroy
   const destroy = () => {
     scene.remove(firework);
     geometry.dispose();
@@ -274,7 +264,7 @@ const createFirework = (count, position, size, texture, radius, color) => {
     value: 1,
     duration: 3,
     ease: "linear",
-    onComplete: destroy,
+    // onComplete: destroy,
   });
 };
 const createRandomFirework = (x) => {
@@ -285,8 +275,8 @@ const createRandomFirework = (x) => {
     Math.random(),
     (Math.random() - 0.5) * 2
   );
-  const size = 0.1 + Math.random() * 0.1;
-  const texture = textures[Math.floor(Math.random() * textures.length)];
+  const size = 0.1 + Math.random() * 0.01;
+  const texture = textures[5];
   const radius = 1;
   const color = new THREE.Color();
   color.setHSL(Math.random(), 1, 0.7);
