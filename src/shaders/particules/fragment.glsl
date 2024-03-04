@@ -1,13 +1,16 @@
-varying vec2 vUv;
-varying vec3 vColor;
-varying float vUtime;
+uniform sampler2D uTexture;
+uniform vec3 uColor;
 
+varying vec3 color;
 
+void main()
+{
+  
 
-void main() {
+  float textureAlpha = texture(uTexture, gl_PointCoord).r;
 
-    gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0); 
-    #include <colorspace_fragment>
+  //Final color
+  gl_FragColor = vec4(color, textureAlpha);
+  #include <tonemapping_fragment>
+  #include <colorspace_fragment>
 }
-
-

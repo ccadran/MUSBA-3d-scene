@@ -1,12 +1,14 @@
 import * as THREE from "three";
-import particulesVertexShader from "./shaders/particules/vertex.glsl";
-import particulesFragmentShader from "./shaders/particules/fragment.glsl";
+// import particulesVertexShader from "./shaders/particules/vertex.glsl";
+// import particulesFragmentShader from "./shaders/particules/fragment.glsl";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { DRACOLoader } from "three/examples/jsm/loaders/DRACOLoader.js";
 import { EffectComposer } from "three/examples/jsm/postprocessing/EffectComposer";
 import { GlitchPass } from "three/examples/jsm/postprocessing/GlitchPass";
 import { RenderPass } from "three/examples/jsm/postprocessing/RenderPass";
+import fireworkVertexShader from "./shaders/particules/vertex.glsl";
+import fireworkFragmentShader from "./shaders/particules/fragment.glsl";
 
 import gsap from "gsap";
 import GUI from "lil-gui";
@@ -171,78 +173,186 @@ gltfLoader.load("/models/paint.glb", (gltf) => {
 /**
  * Particles
  */
-const uniformsOfParticles = {
-  uTime: { value: 0 },
-};
 
-let particles = null;
+/**
+ * New particle
+ */
 
-const particulesExplosion = () => {
-  if (particles !== null) {
-    particlesGeometry.dispose();
-    particlesMaterial.dispose();
-    scene.remove(particles);
-  } //Geometry
-  const particlesGeometry = new THREE.PlaneGeometry(1, 1, 32, 32);
-  const count = 150;
+const textures = [
+  textureLoader.load("./particles/1.png"),
+  textureLoader.load("./particles/2.png"),
+  textureLoader.load("./particles/3.png"),
+  textureLoader.load("./particles/4.png"),
+  textureLoader.load("./particles/5.png"),
+  textureLoader.load("./particles/6.png"),
+  textureLoader.load("./particles/7.png"),
+  textureLoader.load("./particles/8.png"),
+];
 
-  const positions = new Float32Array(count * 3);
-  const finalPositions = new Float32Array(count * 3);
-  const colors = new Float32Array(count * 3);
+const createFirework = (count, position, size, texture, radius, color) => {
+  //Geometry
+  const positionsArray = new Float32Array(count * 3);
+  const colorArray = new Float32Array(count);
+  const sizesArray = new Float32Array(count);
+  const timeMultipliers = new Float32Array(count);
 
-  // Initialisation des positions à (0, 0, 0)
   for (let i = 0; i < count; i++) {
     const i3 = i * 3;
+    const spherical = new THREE.Spherical(
+      radius * ((0.75 + Math.random() * 0.25) * 3.5),
+      Math.random() * Math.PI,
+      Math.random() * Math.PI * 2
+    );
 
-    positions[i3] = (Math.random() - 0.5) * 6;
-    positions[i3 + 1] = (Math.random() - 0.5) * 6;
-    positions[i3 + 2] = (Math.random() - 0.5) * 6;
+    const position = new THREE.Vector3();
+    position.setFromSpherical(spherical);
 
-    colors[i3] = Math.random();
-    colors[i3 + 1] = Math.random();
-    colors[i3 + 2] = Math.random();
+    positionsArray[i3 + 0] = position.x;
+    positionsArray[i3 + 1] = position.y;
+    positionsArray[i3 + 2] = position.z;
+
+    colorArray[i3 + 0] = Math.random() * 1;
+    colorArray[i3 + 1] = Math.random() * 1;
+    colorArray[i3 + 2] = Math.random() * 1;
+    // colorArray[i] = (Math.random() * 1, Math.random() * 1, Math.random() * 1);
+
+    sizesArray[i] = Math.random();
+
+    timeMultipliers[i] = 1 + Math.random();
   }
 
-  particlesGeometry.setAttribute(
+  const geometry = new THREE.BufferGeometry();
+  geometry.setAttribute(
     "position",
-    new THREE.BufferAttribute(positions, 3)
+    new THREE.Float32BufferAttribute(positionsArray, 3)
   );
-  particlesGeometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+  geometry.setAttribute(
+    "aSize",
+    new THREE.Float32BufferAttribute(sizesArray, 1)
+  );
+  geometry.setAttribute(
+    "aTimeMultiplier",
+    new THREE.Float32BufferAttribute(timeMultipliers, 1)
+  );
+  geometry.setAttribute(
+    "aColor",
+    new THREE.Float32BufferAttribute(colorArray, 3)
+  );
 
   //Material
-  const particlesMaterial = new THREE.ShaderMaterial({
-    depthWrite: true,
+  texture.flipY = false;
+  const material = new THREE.ShaderMaterial({
+    vertexShader: fireworkVertexShader,
+    fragmentShader: fireworkFragmentShader,
+    uniforms: {
+      uSize: new THREE.Uniform(size),
+      uResolution: new THREE.Uniform(sizes.resolution),
+      uTexture: new THREE.Uniform(texture),
+      uColor: new THREE.Uniform(color),
+      uProgress: new THREE.Uniform(0),
+    },
+    transparent: true,
+    depthWrite: false,
     blending: THREE.AdditiveBlending,
-    vertexColors: true,
-    vertexShader: particulesVertexShader,
-    fragmentShader: particulesFragmentShader,
-    uniforms: uniformsOfParticles,
   });
 
   //Points
-  particles = new THREE.Points(particlesGeometry, particlesMaterial);
-  particles.position.y = 1.5;
-  particles.position.z = 3.5;
-  scene.add(particles);
+  const firework = new THREE.Points(geometry, material);
+  firework.position.copy(position);
+  firework.position.z = 4;
+  scene.add(firework);
+
+  //Destrouy
+  const destroy = () => {
+    scene.remove(firework);
+    geometry.dispose();
+    material.dispose();
+  };
+
+  //Animate
+  gsap.to(material.uniforms.uProgress, {
+    value: 1,
+    duration: 3,
+    ease: "linear",
+    onComplete: destroy,
+  });
 };
-particulesExplosion();
+const createRandomFirework = (x) => {
+  const count = Math.round(400 + Math.random() * 2000);
 
-// Geometry
-const geometry = new THREE.PlaneGeometry(1, 1, 32, 32);
+  const position = new THREE.Vector3(
+    0,
+    Math.random(),
+    (Math.random() - 0.5) * 2
+  );
+  const size = 0.1 + Math.random() * 0.1;
+  const texture = textures[Math.floor(Math.random() * textures.length)];
+  const radius = 1;
+  const color = new THREE.Color();
+  color.setHSL(Math.random(), 1, 0.7);
+  createFirework(count, position, size, texture, radius, color);
+};
 
-// Material
-const material = new THREE.ShaderMaterial({
-  vertexShader: particulesVertexShader,
-  fragmentShader: particulesFragmentShader,
-  uniforms: {
-    uTime: { value: 0 },
-  },
-  side: THREE.DoubleSide,
+window.addEventListener("click", (e) => {
+  const x = e.clientX / sizes.width;
+  createRandomFirework(x);
 });
+/**
+ * Og particle
+ */
+// const uniformsOfParticles = {
+//   uTime: { value: 0 },
+// };
 
-// Mesh
-const mesh = new THREE.Mesh(geometry, material);
-scene.add(mesh);
+// let particles = null;
+
+// const particulesExplosion = () => {
+//   //Geometry
+//   const particlesGeometry = new THREE.PlaneGeometry(1, 1, 32, 32);
+//   const count = 150;
+
+//   const positions = new Float32Array(count * 3);
+//   const finalPositions = new Float32Array(count * 3);
+//   const colors = new Float32Array(count * 3);
+
+//   // Initialisation des positions à (0, 0, 0)
+//   for (let i = 0; i < count; i++) {
+//     const i3 = i * 3;
+
+//     positions[i3] = (Math.random() - 0.5) * 6;
+//     positions[i3 + 1] = (Math.random() - 0.5) * 6;
+//     positions[i3 + 2] = (Math.random() - 0.5) * 6;
+
+//     colors[i3] = Math.random();
+//     colors[i3 + 1] = Math.random();
+//     colors[i3 + 2] = Math.random();
+//   }
+
+//   particlesGeometry.setAttribute(
+//     "position",
+//     new THREE.BufferAttribute(positions, 3)
+//   );
+//   particlesGeometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
+
+//   //Material
+//   const particlesMaterial = new THREE.ShaderMaterial({
+//     depthWrite: true,
+//     blending: THREE.AdditiveBlending,
+//     vertexColors: true,
+//     vertexShader: particulesVertexShader,
+//     fragmentShader: particulesFragmentShader,
+//     uniforms: uniformsOfParticles,
+//     blending: THREE.AdditiveBlending,
+//   });
+
+//   //Points
+//   particles = new THREE.Points(particlesGeometry, particlesMaterial);
+//   particles.position.y = 1.5;
+//   particles.position.z = 3.5;
+//   scene.add(particles);
+// };
+// particulesExplosion();
+
 /**
  * Background 1
  */
@@ -547,12 +657,22 @@ scene.add(finalScene);
 const sizes = {
   width: window.innerWidth,
   height: window.innerHeight,
+  pixelRatio: Math.min(window.devicePixelRatio, 2),
 };
+sizes.resolution = new THREE.Vector2(
+  sizes.width * sizes.pixelRatio,
+  sizes.height * sizes.pixelRatio
+);
 
 window.addEventListener("resize", () => {
   // Update sizes
   sizes.width = window.innerWidth;
   sizes.height = window.innerHeight;
+  sizes.pixelRatio = Math.min(window.devicePixelRatio, 2);
+  sizes.resolution.set(
+    sizes.width * sizes.pixelRatio,
+    sizes.height * sizes.pixelRatio
+  );
 
   // Update camera
   camera.aspect = sizes.width / sizes.height;
@@ -560,9 +680,8 @@ window.addEventListener("resize", () => {
 
   // Update renderer
   renderer.setSize(sizes.width, sizes.height);
-  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setPixelRatio(sizes.pixelRatio);
 });
-
 /**
  * Camera
  */
@@ -715,7 +834,7 @@ const tick = () => {
   // Update controls
   controls.update();
 
-  uniformsOfParticles.uTime.value = elapsedTime;
+  // uniformsOfParticles.uTime.value = elapsedTime;
 
   // console.log("date now", Date.now(), "uTime", elapsedTime);
   // console.log(elapsedTime - Date.now());
