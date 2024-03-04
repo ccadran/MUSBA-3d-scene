@@ -189,6 +189,7 @@ const textures = [
   textureLoader.load("./particles/8.png"),
 ];
 
+let particles = null;
 const createFirework = (count, position, size, texture, radius, color) => {
   //Geometry
   const positionsArray = new Float32Array(count * 3);
@@ -247,10 +248,10 @@ const createFirework = (count, position, size, texture, radius, color) => {
   });
 
   //Points
-  const firework = new THREE.Points(geometry, material);
-  firework.position.copy(position);
-  firework.position.z = 4;
-  scene.add(firework);
+  particles = new THREE.Points(geometry, material);
+  particles.position.copy(position);
+  particles.position.z = 4;
+  scene.add(particles);
 
   //Destroy
   const destroy = () => {
@@ -283,10 +284,10 @@ const createRandomFirework = (x) => {
   createFirework(count, position, size, texture, radius, color);
 };
 
-window.addEventListener("click", (e) => {
-  const x = e.clientX / sizes.width;
-  createRandomFirework(x);
-});
+// window.addEventListener("click", (e) => {
+//   const x = e.clientX / sizes.width;
+//   createRandomFirework(x);
+// });
 /**
  * Og particle
  */
@@ -692,6 +693,7 @@ enterExperience.addEventListener("click", () => {
     y: 3.3,
     z: 7.5,
     delay: 0.5,
+    onComplete: createRandomFirework,
   });
 });
 
@@ -743,9 +745,15 @@ const moveSceneRight = () => {
   glitchPass.enabled = true;
 
   // uniformsOfParticles.startTime.value = Date.now();
+  if (particles !== null) {
+    particles.geometry.dispose();
+    particles.material.dispose();
+    scene.remove(particles);
+  }
 
   setTimeout(() => {
     glitchPass.enabled = false;
+    createRandomFirework();
   }, 1600);
 };
 
@@ -757,8 +765,15 @@ const moveSceneLeft = () => {
   });
   glitchPass.enabled = true;
   // uniformsOfParticles.startTime.value = Date.now();
+
+  if (particles !== null) {
+    particles.geometry.dispose();
+    particles.material.dispose();
+    scene.remove(particles);
+  }
   setTimeout(() => {
     glitchPass.enabled = false;
+    createRandomFirework();
   }, 1600);
 };
 
