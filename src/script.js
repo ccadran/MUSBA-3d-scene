@@ -188,7 +188,15 @@ const textures = [
   textureLoader.load("./particles/7.png"),
   textureLoader.load("./particles/8.png"),
 ];
-
+const colors = [
+  0, // Rouge
+  240 / 360, // Bleu
+  60 / 360, // Jaune
+  120 / 360, // Vert
+  300 / 360, // Violet
+  30 / 360, // Orange
+  180 / 360, // Cyan
+];
 let particles = null;
 const createFirework = (count, position, size, texture, radius, color) => {
   //Geometry
@@ -251,6 +259,7 @@ const createFirework = (count, position, size, texture, radius, color) => {
   particles = new THREE.Points(geometry, material);
   particles.position.copy(position);
   particles.position.z = 4;
+  particles.position.y = 0.5;
   scene.add(particles);
 
   //Destroy
@@ -263,7 +272,7 @@ const createFirework = (count, position, size, texture, radius, color) => {
   //Animate
   gsap.to(material.uniforms.uProgress, {
     value: 1,
-    duration: 3,
+    duration: 4,
     ease: "linear",
     // onComplete: destroy,
   });
@@ -271,16 +280,12 @@ const createFirework = (count, position, size, texture, radius, color) => {
 const createRandomFirework = (x) => {
   const count = Math.round(400 + Math.random() * 2000);
 
-  const position = new THREE.Vector3(
-    0,
-    Math.random(),
-    (Math.random() - 0.5) * 2
-  );
-  const size = 0.1 + Math.random() * 0.01;
+  const position = new THREE.Vector3(0, 0.5, 2);
+  const size = 0.075;
   const texture = textures[5];
-  const radius = 1;
+  const radius = 1.05;
   const color = new THREE.Color();
-  color.setHSL(Math.random(), 1, 0.7);
+  color.setHSL(colors[Math.floor(Math.random() * colors.length)], 1, 0.7);
   createFirework(count, position, size, texture, radius, color);
 };
 
