@@ -790,7 +790,6 @@ prevButton.addEventListener("click", () => {
 });
 
 window.addEventListener("keydown", (e) => {
-  console.log(e);
   if (e.key === "ArrowRight") {
     moveSceneRight();
   } else if (e.key === "ArrowLeft") {
