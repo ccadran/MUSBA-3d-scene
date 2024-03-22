@@ -820,10 +820,13 @@ const tick = () => {
   if (mixer) {
     mixer.update(deltaTime);
   }
-
-  phone.rotation.y += deltaTime * 0.8;
-  paint.rotation.y += deltaTime * 0.3;
-  paint.rotation.x += deltaTime * 0.2;
+  if (phone) {
+    phone.rotation.y += deltaTime * 0.8;
+  }
+  if (paint) {
+    paint.rotation.y += deltaTime * 0.3;
+    paint.rotation.x += deltaTime * 0.2;
+  }
   if (isEven(Math.floor(elapsedTime * 2))) {
     pointLight2.intensity = 0;
   } else {
