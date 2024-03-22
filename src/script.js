@@ -52,7 +52,6 @@ setTimeout(() => {
   });
   enterExperience.innerHTML = "<h4>Enter</h4>";
 }, [3500]);
-console.log(enterExperience, loader, htmlContainer);
 
 window.addEventListener("mousemove", (e) => {
   gsap.set(cursorFollow, {
