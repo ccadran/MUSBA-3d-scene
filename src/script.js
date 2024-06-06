@@ -133,7 +133,7 @@ let mixer = null;
 
 let phone;
 
-gltfLoader.load("/models/phone.glb", (gltf) => {
+gltfLoader.load("/models/phone-compressed.glb", (gltf) => {
   phone = gltf.scene;
   phone.scale.set(0.2, 0.2, 0.2);
   phone.position.y = 1.5;
@@ -151,7 +151,7 @@ gltfLoader.load("/models/phone.glb", (gltf) => {
 });
 
 let paint;
-gltfLoader.load("/models/paint.glb", (gltf) => {
+gltfLoader.load("/models/paint-compressed.glb", (gltf) => {
   paint = gltf.scene;
   paint.scale.set(0.4, 0.4, 0.4);
   paint.position.y = -2.5;
