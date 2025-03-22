@@ -19,7 +19,6 @@ void main()
   float explodingProgress = remap(progress, 0.0, 0.4, 0.0, 1.0);
   explodingProgress = clamp(explodingProgress, 0.0, 1.0);
   explodingProgress = 1.0 - (pow(1.0 - explodingProgress, 3.0));
-//   newPosition *= explodingProgress;
   newPosition = mix(vec3(0.0), newPosition, explodingProgress);
 
   //Falling
@@ -30,8 +29,6 @@ void main()
 
   //Scaling
   float sizeOpeningProgress = remap(progress, 0.0, 0.125, 0.0, 1.0);
-//   float sizeClosingProgress = remap(progress, 0.125, 1.0, 1.0, 0.0);
-//   float sizeProgress = min(sizeOpeningProgress, sizeClosingProgress);
    float sizeProgress = clamp(sizeOpeningProgress, 0.0, 1.0);
 
   //Twinkling
@@ -40,9 +37,6 @@ void main()
   float sizeTwinkling = sin(progress * 30.0) * 0.5 + 0.5;
   sizeTwinkling = 1.0 - sizeTwinkling * twinklingProgress;
 
-
-
-
   //Final position
   vec4 modelPosition = modelMatrix * vec4(newPosition, 1.0); 
   vec4 viewPosition = viewMatrix * modelPosition;
@@ -50,14 +44,15 @@ void main()
 
 //   Final size
   gl_PointSize = uSize * uResolution.y * aSize * sizeProgress ;
-//   gl_PointSize = uSize * uResolution.y;
   gl_PointSize *= 1.0 /- viewPosition.z;
 
   if(gl_PointSize < 1.0)
   {
     gl_Position = vec4(9999.9);
   }
-
-  //Varyings
-
   }
+
+
+
+
+  

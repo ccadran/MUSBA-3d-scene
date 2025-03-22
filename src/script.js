@@ -136,7 +136,7 @@ let phone;
 gltfLoader.load("/models/phone-compressed.glb", (gltf) => {
   phone = gltf.scene;
   phone.scale.set(0.2, 0.2, 0.2);
-  phone.position.y = 1.5;
+  phone.position.y = 1.4;
   phone.position.z = 3;
   phone.rotation.y = Math.PI * 1.35;
 
@@ -154,7 +154,7 @@ let paint;
 gltfLoader.load("/models/paint-compressed.glb", (gltf) => {
   paint = gltf.scene;
   paint.scale.set(0.4, 0.4, 0.4);
-  paint.position.y = -2.5;
+  paint.position.y = -2;
   paint.position.z = 3;
   paint.rotation.y = Math.PI * 1.35;
   paint.rotation.x = Math.PI * 0.65;
@@ -288,66 +288,6 @@ const createRandomFirework = (x) => {
   createFirework(count, position, size, texture, radius, color);
 };
 
-// window.addEventListener("click", (e) => {
-//   const x = e.clientX / sizes.width;
-//   createRandomFirework(x);
-// });
-/**
- * Og particle
- */
-// const uniformsOfParticles = {
-//   uTime: { value: 0 },
-// };
-
-// let particles = null;
-
-// const particulesExplosion = () => {
-//   //Geometry
-//   const particlesGeometry = new THREE.PlaneGeometry(1, 1, 32, 32);
-//   const count = 150;
-
-//   const positions = new Float32Array(count * 3);
-//   const finalPositions = new Float32Array(count * 3);
-//   const colors = new Float32Array(count * 3);
-
-//   // Initialisation des positions à (0, 0, 0)
-//   for (let i = 0; i < count; i++) {
-//     const i3 = i * 3;
-
-//     positions[i3] = (Math.random() - 0.5) * 6;
-//     positions[i3 + 1] = (Math.random() - 0.5) * 6;
-//     positions[i3 + 2] = (Math.random() - 0.5) * 6;
-
-//     colors[i3] = Math.random();
-//     colors[i3 + 1] = Math.random();
-//     colors[i3 + 2] = Math.random();
-//   }
-
-//   particlesGeometry.setAttribute(
-//     "position",
-//     new THREE.BufferAttribute(positions, 3)
-//   );
-//   particlesGeometry.setAttribute("color", new THREE.BufferAttribute(colors, 3));
-
-//   //Material
-//   const particlesMaterial = new THREE.ShaderMaterial({
-//     depthWrite: true,
-//     blending: THREE.AdditiveBlending,
-//     vertexColors: true,
-//     vertexShader: particulesVertexShader,
-//     fragmentShader: particulesFragmentShader,
-//     uniforms: uniformsOfParticles,
-//     blending: THREE.AdditiveBlending,
-//   });
-
-//   //Points
-//   particles = new THREE.Points(particlesGeometry, particlesMaterial);
-//   particles.position.y = 1.5;
-//   particles.position.z = 3.5;
-//   scene.add(particles);
-// };
-// particulesExplosion();
-
 /**
  * Background 1
  */
@@ -362,7 +302,7 @@ debugObject.wallColor = "#010A0C";
 
 const floor = new THREE.Mesh(
   new THREE.PlaneGeometry(5, 5),
-  new THREE.MeshStandardMaterial({
+  new THREE.MeshBasicMaterial({
     color: debugObject.wallColor,
     metalness: 0,
     roughness: 0.5,
@@ -371,11 +311,12 @@ const floor = new THREE.Mesh(
 );
 floor.receiveShadow = true;
 floor.rotation.x = -Math.PI * 0.5;
+floor.position.y = 1;
 backgroundGroup.add(floor);
 
 const roof = new THREE.Mesh(
   new THREE.PlaneGeometry(5, 5),
-  new THREE.MeshStandardMaterial({
+  new THREE.MeshBasicMaterial({
     color: debugObject.wallColor,
     metalness: 0,
     roughness: 0.5,
@@ -385,11 +326,11 @@ const roof = new THREE.Mesh(
 roof.receiveShadow = true;
 roof.rotation.x = -Math.PI * 0.5;
 roof.position.y = 5;
-backgroundGroup.add(roof);
+// backgroundGroup.add(roof);
 
 const wall1 = new THREE.Mesh(
   new THREE.PlaneGeometry(5, 5),
-  new THREE.MeshStandardMaterial({
+  new THREE.MeshBasicMaterial({
     color: debugObject.wallColor,
     metalness: 0,
     roughness: 0.5,
@@ -399,11 +340,11 @@ const wall1 = new THREE.Mesh(
 wall1.rotation.z = Math.PI;
 wall1.position.z = -2.5;
 wall1.position.y = 2.5;
-backgroundGroup.add(wall1);
+// backgroundGroup.add(wall1);
 
 const wall2 = new THREE.Mesh(
   new THREE.PlaneGeometry(5, 5),
-  new THREE.MeshStandardMaterial({
+  new THREE.MeshBasicMaterial({
     color: debugObject.wallColor,
     metalness: 0,
     roughness: 0.5,
@@ -413,11 +354,11 @@ const wall2 = new THREE.Mesh(
 wall2.rotation.z = Math.PI;
 wall2.position.z = 2.5;
 wall2.position.y = 2.5;
-backgroundGroup.add(wall2);
+// backgroundGroup.add(wall2);
 
 const wall3 = new THREE.Mesh(
   new THREE.PlaneGeometry(5, 5),
-  new THREE.MeshStandardMaterial({
+  new THREE.MeshBasicMaterial({
     color: debugObject.wallColor,
     metalness: 0,
     roughness: 0.5,
@@ -427,7 +368,7 @@ const wall3 = new THREE.Mesh(
 wall3.rotation.y = Math.PI * 0.5;
 wall3.position.y = 2.5;
 wall3.position.x = 2.5;
-backgroundGroup.add(wall3);
+// backgroundGroup.add(wall3);
 
 backgroundGroup.rotation.y = Math.PI * 0.5;
 backgroundGroup.position.y = -1;
@@ -444,7 +385,7 @@ debugObject.wallColor = "#010A0C";
 
 const secondFloor = new THREE.Mesh(
   new THREE.PlaneGeometry(5, 5),
-  new THREE.MeshStandardMaterial({
+  new THREE.MeshBasicMaterial({
     color: debugObject.wallColor,
     metalness: 0,
     roughness: 0.5,
@@ -457,7 +398,7 @@ secondBackgroundGroup.add(secondFloor);
 
 const secondRoof = new THREE.Mesh(
   new THREE.PlaneGeometry(5, 5),
-  new THREE.MeshStandardMaterial({
+  new THREE.MeshBasicMaterial({
     color: debugObject.wallColor,
     metalness: 0,
     roughness: 0.5,
@@ -471,7 +412,7 @@ secondBackgroundGroup.add(secondRoof);
 
 const secondWall1 = new THREE.Mesh(
   new THREE.PlaneGeometry(5, 5),
-  new THREE.MeshStandardMaterial({
+  new THREE.MeshBasicMaterial({
     color: debugObject.wallColor,
     metalness: 0,
     roughness: 0.5,
@@ -485,7 +426,7 @@ secondBackgroundGroup.add(secondWall1);
 
 const secondWall2 = new THREE.Mesh(
   new THREE.PlaneGeometry(5, 5),
-  new THREE.MeshStandardMaterial({
+  new THREE.MeshBasicMaterial({
     color: debugObject.wallColor,
     metalness: 0,
     roughness: 0.5,
@@ -499,7 +440,7 @@ secondBackgroundGroup.add(secondWall2);
 
 const secondWall3 = new THREE.Mesh(
   new THREE.PlaneGeometry(5, 5),
-  new THREE.MeshStandardMaterial({
+  new THREE.MeshBasicMaterial({
     color: debugObject.wallColor,
     metalness: 0,
     roughness: 0.5,
@@ -516,7 +457,7 @@ secondBackgroundGroup.rotation.x = Math.PI;
 secondBackgroundGroup.position.y = -1;
 secondBackgroundGroup.position.z = 3;
 
-world2.add(secondBackgroundGroup);
+// world2.add(secondBackgroundGroup);
 
 // const background = gui.addFolder("background");
 gui.add(backgroundGroup.position, "x", -10, 10, 0.01).name("backgroundGroupX");
@@ -546,8 +487,8 @@ const directionalLight = new THREE.DirectionalLight(
   1.8
 );
 directionalLight.castShadow = true;
-directionalLight.shadow.mapSize.set(1024, 1024);
-directionalLight.shadow.camera.far = 15;
+directionalLight.shadow.mapSize.set(512, 512);
+directionalLight.shadow.camera.far = 10;
 directionalLight.shadow.camera.left = -7;
 directionalLight.shadow.camera.top = 7;
 directionalLight.shadow.camera.right = 7;
@@ -696,7 +637,7 @@ enterExperience.addEventListener("click", () => {
     x: 0,
     y: 3.3,
     z: 7.5,
-    delay: 0.5,
+    // delay: 0.2,
     onComplete: createRandomFirework,
   });
 });
@@ -739,6 +680,14 @@ effectComposer.addPass(glitchPass);
 /**
  * Animate
  */
+const cleanupParticles = () => {
+  if (particles !== null) {
+    scene.remove(particles);
+    particles.geometry.dispose();
+    particles.material.dispose();
+    particles = null;
+  }
+};
 
 const moveSceneRight = () => {
   gsap.to(finalScene.rotation, {
@@ -749,11 +698,7 @@ const moveSceneRight = () => {
   glitchPass.enabled = true;
 
   // uniformsOfParticles.startTime.value = Date.now();
-  if (particles !== null) {
-    particles.geometry.dispose();
-    particles.material.dispose();
-    scene.remove(particles);
-  }
+  cleanupParticles();
 
   setTimeout(() => {
     glitchPass.enabled = false;
@@ -770,11 +715,7 @@ const moveSceneLeft = () => {
   glitchPass.enabled = true;
   // uniformsOfParticles.startTime.value = Date.now();
 
-  if (particles !== null) {
-    particles.geometry.dispose();
-    particles.material.dispose();
-    scene.remove(particles);
-  }
+  cleanupParticles();
   setTimeout(() => {
     glitchPass.enabled = false;
     createRandomFirework();
